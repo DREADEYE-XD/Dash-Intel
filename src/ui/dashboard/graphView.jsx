@@ -148,7 +148,7 @@ export const GraphView = () => {
           <ul className="w-full flex justify-start items-center gap-4 px-8 py-1 text-sm ">
             <li>Filters:</li>
             <li
-              className={`px-2 rounded-md cursor-pointer hoverMode ${
+              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
                 graphFilterType.isRaw ? "active" : ""
               }`}
               onClick={() => handleFilterClick("raw")}
@@ -160,7 +160,7 @@ export const GraphView = () => {
               style={{ borderColor: themeOptions.graphBorderColor }}
             ></li>
             <li
-              className={`px-2 rounded-md cursor-pointer hoverMode ${
+              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
                 graphFilterType.isAverage ? "active" : ""
               }`}
               onClick={() => handleFilterClick("average")}
@@ -172,7 +172,7 @@ export const GraphView = () => {
               style={{ borderColor: themeOptions.graphBorderColor }}
             ></li>
             <li
-              className={`px-2 rounded-md cursor-pointer hoverMode ${
+              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
                 graphFilterType.isRawPlusAverage ? "active" : ""
               }`}
               onClick={() => handleFilterClick("rawPlusAverage")}

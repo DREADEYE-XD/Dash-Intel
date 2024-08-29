@@ -27,6 +27,9 @@ export const ThemeProvider = ({ children }) => {
 
     tabBgColor: theme ? "#e6e6e683" : "#919191af",
 
+    dateDropDownBgColor: theme ? "#b9b9b9" : "#444444",
+    dateDropDownTextColor:theme ? "#000" : "#fff",
+
     graphBorderColor: theme ? "#dddddd28" : "#9696962d",
     graphTextColor: theme ? "#fffcf2" : "333",
     graphMainColor: theme ? "#ffdd00" : "#02cecb",

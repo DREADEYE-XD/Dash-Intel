@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { OtherInfoGraphs } from "./other_infoGraphs";
 import { useTheme } from "../../lib/themeContext";
-import { DateDropDown } from "../../components/graphView/mainGraphs/dateDropDown";
+// import DateDropDown from "../../components/graphView/mainGraphs/dateDropDown";
 import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import SkeletonGraph from "../../components/graphView/mainGraphs/skeletonGraph";
+import { DateDropDown } from "../../components/graphView/mainGraphs/dateDropDown";
 
 export const GraphView = () => {
   const { themeOptions } = useTheme();
@@ -77,7 +78,7 @@ export const GraphView = () => {
         <div className="w-full h-[70px] flex gap-4  items-center justify-center ">
           {/* Game Name */}
           <div>
-            <span className="text-2xl font-bold">{gameName}</span>
+            <span className="text-3xl font-bold">{gameName}</span>
           </div>
           {/* Change date settings */}
           <div className="flex flex-col">
@@ -85,7 +86,8 @@ export const GraphView = () => {
               onClick={() => {
                 setIsDateTabCollapsed(!isDateTabCollapsed);
               }}
-              className="w-[200px] flex justify-center items-center gap-1 text-xl border-black border-2 rounded-lg px-2"
+              className="w-[200px] flex justify-center items-center gap-1 text-md border-[1px] rounded-lg px-2"
+              style={{borderColor: themeOptions.borderColor}}
             >
               {selectedDate ? (
                 <span>{selectedDate}</span>

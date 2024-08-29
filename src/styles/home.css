@@ -29,10 +29,18 @@ body::-webkit-scrollbar-thumb:hover {
   border-bottom: 2px solid #ff4848;
 }
 
-.gameTabActive{
-  background-color: #b8b8b8af;
+.tabActive{
+  background-color: #ff6060b9
 }
 
 .hoverMode:hover{
   background-color: #91919173;
+}
+
+.tabActive .hoverMode:hover{
+  background-color: #ff6060b9;
+}
+
+.as{
+  color: #444444;
 }

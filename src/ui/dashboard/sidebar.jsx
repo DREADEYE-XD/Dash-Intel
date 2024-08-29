@@ -85,7 +85,7 @@ export const Sidebar = () => {
                 <li
                   key={game}
                   className={`rounded-md cursor-pointer hoverMode ${
-                    game === decodeURIComponent(gameName) ? "gameTabActive" : ""
+                    game === decodeURIComponent(gameName) ? "tabActive" : ""
                   }`}
                   onClick={() => handleGameClick(game)}
                 >

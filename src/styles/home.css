@@ -1,0 +1,38 @@
+body::-webkit-scrollbar {
+  display: none;
+  width: 10px;
+  height: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  display: none;
+  background-color: #cccccc;
+}
+
+body::-webkit-scrollbar-thumb {
+  display: none;
+  background-color: #808080;
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  display: none;
+  background: #a5a4a4;
+}
+
+#themeToggler{
+  transition: 200ms ease-in-out;
+}
+
+.active{
+  border-radius: 6px 6px 0px 0px;
+  border-bottom: 2px solid #ff4848;
+}
+
+.gameTabActive{
+  background-color: #b8b8b8af;
+}
+
+.hoverMode:hover{
+  background-color: #91919173;
+}

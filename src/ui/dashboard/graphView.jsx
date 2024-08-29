@@ -11,26 +11,17 @@ export const GraphView = () => {
   const [selectedFile, setSelectedFile] = useState(null); // For storing the selected file
   const [selectedDate, setSelectedDate] = useState();
   const [availableFilePaths, setAvailableFilePaths] = useState([]);
+  const [graphFilterType, setGraphFilterType] = useState({});
   const { gameName } = useParams();
   const location = useLocation();
-  // console.log(filePaths); // Using useLocation to get state
 
-  // useEffect(() => {
-  //   if (filePaths && filePaths.length > 0) {
-  //     // Sort file paths by date (most recent first)
-  //     const sortedFiles = filePaths.sort((a, b) => {
-  //       const dateA = new Date(a.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
-  //       const dateB = new Date(b.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
-  //       return dateB - dateA;
-  //     });
-
-  //     // console.log("filepath:", filePaths);
-
-  //     // Save the sorted file paths to localStorage
-  //     localStorage.setItem("filePaths", JSON.stringify(sortedFiles));
-  //     setSelectedFile(sortedFiles[0]);
-  //   }
-  // }, [filePaths]);
+  useEffect(() => {
+    setGraphFilterType({
+      isRaw: false,
+      isAverage: false,
+      isRawPlusAverage: true,
+    });
+  }, []);
 
   useEffect(() => {
     const storedFilePaths = localStorage.getItem(`filePaths_${gameName}`);
@@ -61,6 +52,18 @@ export const GraphView = () => {
     }
     setIsDateTabCollapsed(false);
   };
+
+  const handleFilterClick = (filterType) => {
+    setGraphFilterType({
+      isRaw: filterType === "raw",
+      isAverage: filterType === "average",
+      isRawPlusAverage: filterType === "rawPlusAverage",
+    });
+  };
+
+  // useEffect(() => {
+  //   console.log(graphFilterType);
+  // }, [graphFilterType]);
 
   return (
     // graph view wrapper
@@ -144,19 +147,36 @@ export const GraphView = () => {
           {/* Filter type btns   */}
           <ul className="w-full flex justify-start items-center gap-4 px-8 py-1 text-sm ">
             <li>Filters:</li>
-            <li className="px-2 rounded-md cursor-pointer hoverMode">Raw</li>
+            <li
+              className={`px-2 rounded-md cursor-pointer hoverMode ${
+                graphFilterType.isRaw ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("raw")}
+            >
+              Raw
+            </li>
             <li
               className="border-[1px] h-full"
               style={{ borderColor: themeOptions.graphBorderColor }}
             ></li>
-            <li className="px-2 rounded-md cursor-pointer hoverMode">
+            <li
+              className={`px-2 rounded-md cursor-pointer hoverMode ${
+                graphFilterType.isAverage ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("average")}
+            >
               Moving Average
             </li>
             <li
               className="border-[1px] h-full"
               style={{ borderColor: themeOptions.graphBorderColor }}
             ></li>
-            <li className="px-2 rounded-md cursor-pointer hoverMode">
+            <li
+              className={`px-2 rounded-md cursor-pointer hoverMode ${
+                graphFilterType.isRawPlusAverage ? "active" : ""
+              }`}
+              onClick={() => handleFilterClick("rawPlusAverage")}
+            >
               Moving Avg + Raw
             </li>
           </ul>
@@ -166,8 +186,8 @@ export const GraphView = () => {
         <div className="h-[750px] w-[calc(100vw-350px)] flex justify-center items-end">
           <div className="w-full h-full">
             {/* Conditionally render either SkeletonGraph or the selected graph */}
-            {selectedFile ? (
-              <Outlet context={selectedFile} />
+            {selectedFile && graphFilterType ? (
+              <Outlet context={{ selectedFile, graphFilterType }} />
             ) : (
               <SkeletonGraph />
             )}
@@ -180,3 +200,22 @@ export const GraphView = () => {
     </div>
   );
 };
+
+// console.log(filePaths); // Using useLocation to get state
+
+// useEffect(() => {
+//   if (filePaths && filePaths.length > 0) {
+//     // Sort file paths by date (most recent first)
+//     const sortedFiles = filePaths.sort((a, b) => {
+//       const dateA = new Date(a.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
+//       const dateB = new Date(b.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
+//       return dateB - dateA;
+//     });
+
+//     // console.log("filepath:", filePaths);
+
+//     // Save the sorted file paths to localStorage
+//     localStorage.setItem("filePaths", JSON.stringify(sortedFiles));
+//     setSelectedFile(sortedFiles[0]);
+//   }
+// }, [filePaths]);

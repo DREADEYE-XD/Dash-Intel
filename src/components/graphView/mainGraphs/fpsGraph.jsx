@@ -29,7 +29,7 @@ ChartJS.register(
 
 const FpsGraph = () => {
   const [chartData, setChartData] = useState(null);
-  const selectedFile = useOutletContext(); // Get the selected file from the Outlet context
+  const { selectedFile, graphFilterType } = useOutletContext(); // Get the selected file from the Outlet context
   const { themeOptions } = useTheme();
 
   ChartJS.defaults.color = `${themeOptions.graphTextColor}`;
@@ -46,33 +46,52 @@ const FpsGraph = () => {
         });
         const windowSize = 10; // 5-second moving average
 
-        setChartData({
-          labels: chartAsJson.Runs[0].CaptureData.TimeInSeconds,
-          datasets: [
-            {
-              label: "FPS",
-              data: fpsbetweenPresents,
-              borderColor: `${themeOptions.graphMainColor}`, // More transparent
-              backgroundColor: "rgba(75, 192, 192, 0.1)", // Very light background
-              borderWidth: 1, // Thinner line
-              tension: 0.1,
-              yAxisID: "y",
-              pointRadius: 0,
-              order: 2, // This will be drawn first (bottom layer)
-            },
-            {
-              label: "5-Second Moving Average",
-              data: ma(fpsbetweenPresents, windowSize),
-              borderColor: `${themeOptions.graphMAvgColor}`, // Fully opaque
-              backgroundColor: "rgba(255, 99, 132, 0.2)", // Light background
-              borderWidth: 2, // Thicker line
-              tension: 0.1,
-              yAxisID: "y",
-              pointRadius: 0,
-              order: 1, // This will be drawn second (top layer)
-            },
-          ],
-        });
+        const fpsBtwnPrsntsDataset = {
+          label: "FPS",
+          data: fpsbetweenPresents,
+          borderColor: `${themeOptions.graphMainColor}`, // More transparent
+          backgroundColor: "rgba(75, 192, 192, 0.1)", // Very light background
+          borderWidth: 1, // Thinner line
+          tension: 0.1,
+          yAxisID: "y",
+          pointRadius: 0,
+          order: 2, // This will be drawn first (bottom layer)
+        };
+
+        const mvAvgDataset = {
+          label: "5-Second Moving Average",
+          data: ma(fpsbetweenPresents, windowSize),
+          borderColor: `${themeOptions.graphMAvgColor}`, // Fully opaque
+          backgroundColor: "rgba(255, 99, 132, 0.2)", // Light background
+          borderWidth: 2, // Thicker line
+          tension: 0.1,
+          yAxisID: "y",
+          pointRadius: 0,
+          order: 1, // This will be drawn second (top layer)
+        };
+
+        if (graphFilterType) {
+          // console.log(graphFilterType);
+
+          if (graphFilterType.isRaw === true) {
+            setChartData({
+              labels: chartAsJson.Runs[0].CaptureData.TimeInSeconds,
+              datasets: [fpsBtwnPrsntsDataset],
+            });
+          }
+          if (graphFilterType.isAverage === true) {
+            setChartData({
+              labels: chartAsJson.Runs[0].CaptureData.TimeInSeconds,
+              datasets: [mvAvgDataset],
+            });
+          }
+          if (graphFilterType.isRawPlusAverage === true) {
+            setChartData({
+              labels: chartAsJson.Runs[0].CaptureData.TimeInSeconds,
+              datasets: [fpsBtwnPrsntsDataset, mvAvgDataset],
+            });
+          }
+        }
       } catch (error) {
         console.error("Error loading the JSON file:", error);
       }
@@ -81,7 +100,12 @@ const FpsGraph = () => {
     if (selectedFile) {
       loadJsonData();
     }
-  }, [themeOptions.graphMainColor, themeOptions.graphMAvgColor, selectedFile]);
+  }, [
+    themeOptions.graphMainColor,
+    themeOptions.graphMAvgColor,
+    selectedFile,
+    graphFilterType,
+  ]);
 
   const options = {
     responsive: true,

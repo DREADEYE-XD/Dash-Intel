@@ -76,7 +76,9 @@ export const Sidebar = () => {
               setIsExpanded(!isExpanded);
             }}
           >
+           
             <MenuArrow isExpanded={isExpanded} theme={theme} />
+            
           </div>
 
           {isExpanded && (

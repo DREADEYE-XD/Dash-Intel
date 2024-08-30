@@ -25,7 +25,7 @@ export const OtherInfoGraphs = () => {
       {/* oig containers */}
       {/* container 1 */}
       <div
-        className="h-full w-[calc(100%/3)] border-r-[1px]"
+        className="h-full w-[40%] border-r-[1px]"
         style={{ borderColor: themeOptions.graphBorderColor }}
       >
         {/* Could not implement the theme functionality inside the FpsPercentilesGraph*/}
@@ -46,12 +46,12 @@ export const OtherInfoGraphs = () => {
 
       {/* container 2 */}
       <div
-        className="h-full w-[calc(100%/3)] border-r-[1px]"
+        className="h-full w-[30%] border-r-[1px]"
         style={{ borderColor: themeOptions.graphBorderColor }}
       ></div>
 
       {/* container 3 */}
-      <div className="h-full w-[calc(100%/3)]"></div>
+      <div className="h-full w-[30%]"></div>
     </div>
   );
 };

@@ -48,6 +48,8 @@ function TestFpsPercentilesGraph({ fpsData }) {
       },
     },
     responsive: true,
+    maintainAspectRatio: false,
+
     plugins: {
       legend: {
         position: "top",

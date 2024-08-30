@@ -9,13 +9,13 @@ export const MenuArrow = ({isExpanded, theme}) => {
                 <img
                   src={
                     theme
-                      ? "./assets/icons/arrow-down(white).png"
-                      : "./assets/icons/arrow-down.png"
+                      ? "/assets/icons/arrow-down(white).png"
+                      : "/assets/icons/arrow-down.png"
                   }
                   alt={
                     theme
-                      ? "./assets/icons/arrow-down(white).png"
-                      : "./assets/icons/arrow-down.png"
+                      ? "/assets/icons/arrow-down(white).png"
+                      : "/assets/icons/arrow-down.png"
                   }
                   height="16"
                   width="16"
@@ -24,13 +24,13 @@ export const MenuArrow = ({isExpanded, theme}) => {
                 <img
                   src={
                     theme
-                      ? "./assets/icons/arrow-right(white).png"
-                      : "./assets/icons/arrow-right.png"
+                      ? "/assets/icons/arrow-right(white).png"
+                      : "/assets/icons/arrow-right.png"
                   }
                   alt={
                     theme
-                      ? "./assets/icons/arrow-right(white).png"
-                      : "./assets/icons/arrow-right.png"
+                      ? "/assets/icons/arrow-right(white).png"
+                      : "/assets/icons/arrow-right.png"
                   }
                   height="16"
                   width="16"

@@ -7,8 +7,8 @@ export const LeftNavBtns = () => {
       {/* search input */}
       <div className="p-10 flex items-center">
         <img
-          src="./assets/icons/search.png"
-          alt="./assets/icons/search.png"
+          src="/assets/icons/search.png"
+          alt="/assets/icons/search.png"
           height="16"
           width="16"
           className="absolute ml-2"
@@ -19,7 +19,7 @@ export const LeftNavBtns = () => {
       {/* nav btns */}
       <ul
         id="leftNavBtn"
-        className="flex justify-center items-center gap-8 text-lg text-white"
+        className="flex justify-center items-center gap-8 text-lg text-white font-semibold"
       >
         <li className="px-4 py-1 cursor-pointer rounded-md hover:bg-[#1737533f]">
           <NavLink

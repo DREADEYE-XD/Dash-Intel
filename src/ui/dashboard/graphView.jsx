@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { OtherInfoGraphs } from "./other_infoGraphs";
 import { useTheme } from "../../lib/themeContext";
 // import DateDropDown from "../../components/graphView/mainGraphs/dateDropDown";
-import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import SkeletonGraph from "../../components/graphView/mainGraphs/skeletonGraph";
-import { DateDropDown } from "../../components/graphView/mainGraphs/dateDropDown";
+import { InfoNav } from "../../components/graphView/mainGraphs/infoNav";
+import { FilterBtns } from "../../components/graphView/mainGraphs/filterBtns";
+import { GraphType } from "../../components/graphView/mainGraphs/graphType";
 
 export const GraphView = () => {
   const { themeOptions } = useTheme();
@@ -51,7 +53,7 @@ export const GraphView = () => {
     if (selected) {
       setSelectedFile(selected);
     }
-    setIsDateTabCollapsed(false);
+    
   };
 
   const handleFilterClick = (filterType) => {
@@ -62,10 +64,6 @@ export const GraphView = () => {
     });
   };
 
-  // useEffect(() => {
-  //   console.log(graphFilterType);
-  // }, [graphFilterType]);
-
   return (
     // graph view wrapper
     <div className="h-[calc(100vh-60px)] w-[calc(100vw-300px)] ">
@@ -74,114 +72,32 @@ export const GraphView = () => {
         className="border-b-[1px]"
         style={{ borderColor: themeOptions.borderColor }}
       >
-        {/* info bar */}
-        <div className="w-full h-[70px] flex gap-4  items-center justify-center ">
-          {/* Game Name */}
-          <div>
-            <span className="text-3xl font-bold">{gameName}</span>
-          </div>
-          {/* Change date settings */}
-          <div className="flex flex-col">
-            <button
-              onClick={() => {
-                setIsDateTabCollapsed(!isDateTabCollapsed);
-              }}
-              className="w-[200px] flex justify-center items-center gap-1 text-md border-[1px] rounded-lg px-2"
-              style={{borderColor: themeOptions.borderColor}}
-            >
-              {selectedDate ? (
-                <span>{selectedDate}</span>
-              ) : (
-                <span>Latest Date</span>
-              )}
-              <img
-                src="./assets/icons/arrow-down.png"
-                alt="./assets/icons/arrow-down.png"
-                height="18"
-                width="18"
-              />
-            </button>
-            {/* date options wrapper */}
-            {availableFilePaths &&
-            availableFilePaths.length > 0 &&
-            isDateTabCollapsed ? (
-              <DateDropDown
-                setIsDateTabCollapsed={setIsDateTabCollapsed}
-                availableFilePaths={availableFilePaths}
-                handleDateSelection={handleDateSelection}
-                setSelectedDate={setSelectedDate}
-              />
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
+        <InfoNav
+          gameName={gameName}
+          setIsDateTabCollapsed={setIsDateTabCollapsed}
+          isDateTabCollapsed={isDateTabCollapsed}
+          themeOptions={themeOptions}
+          selectedDate={selectedDate}
+          availableFilePaths={availableFilePaths}
+          handleDateSelection={handleDateSelection}
+          setSelectedDate={setSelectedDate}
+        />
+
         {/* section nav */}
         <nav className="h-[40px] flex flex-col justify-center items-start gap-4">
-          {/* Graph Type Btns */}
-          <ul
-            className="w-full flex justify-start items-center gap-4 px-8 py-1 font-semibold border-b-[1px]"
-            style={{ borderColor: themeOptions.graphBorderColor }}
-          >
-            <li className="px-2 rounded-md cursor-pointer hoverMode">
-              <NavLink
-                to={`/analysis/${gameName}/frameTimeGraph`}
-                state={{ filePaths: availableFilePaths }}
-              >
-                FrameTimes
-              </NavLink>
-            </li>
-            {/* Placed just for a border seperator view */}
-            <li
-              className="border-[1px] h-full"
-              style={{ borderColor: themeOptions.graphBorderColor }}
-            ></li>
-            <li className="px-2 rounded-md cursor-pointer hoverMode">
-              <NavLink
-                to={`/analysis/${gameName}/fpsGraph`}
-                state={{ filePaths: availableFilePaths }}
-              >
-                FPS
-              </NavLink>
-            </li>
-          </ul>
+          <GraphType
+            themeOptions={themeOptions}
+            gameName={gameName}
+            availableFilePaths={availableFilePaths}
+          />
 
-          {/* Filter type btns   */}
-          <ul className="w-full flex justify-start items-center gap-4 px-8 py-1 text-sm ">
-            <li>Filters:</li>
-            <li
-              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
-                graphFilterType.isRaw ? "active" : ""
-              }`}
-              onClick={() => handleFilterClick("raw")}
-            >
-              Raw
-            </li>
-            <li
-              className="border-[1px] h-full"
-              style={{ borderColor: themeOptions.graphBorderColor }}
-            ></li>
-            <li
-              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
-                graphFilterType.isAverage ? "active" : ""
-              }`}
-              onClick={() => handleFilterClick("average")}
-            >
-              Moving Average
-            </li>
-            <li
-              className="border-[1px] h-full"
-              style={{ borderColor: themeOptions.graphBorderColor }}
-            ></li>
-            <li
-              className={`px-2 rounded-t-[6px] cursor-pointer hoverMode ${
-                graphFilterType.isRawPlusAverage ? "active" : ""
-              }`}
-              onClick={() => handleFilterClick("rawPlusAverage")}
-            >
-              Moving Avg + Raw
-            </li>
-          </ul>
+          <FilterBtns
+            themeOptions={themeOptions}
+            gameName={gameName}
+            availableFilePaths={availableFilePaths}
+            graphFilterType={graphFilterType}
+            handleFilterClick={handleFilterClick}
+          />
         </nav>
 
         {/* graph view container */}
@@ -202,22 +118,3 @@ export const GraphView = () => {
     </div>
   );
 };
-
-// console.log(filePaths); // Using useLocation to get state
-
-// useEffect(() => {
-//   if (filePaths && filePaths.length > 0) {
-//     // Sort file paths by date (most recent first)
-//     const sortedFiles = filePaths.sort((a, b) => {
-//       const dateA = new Date(a.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
-//       const dateB = new Date(b.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0]);
-//       return dateB - dateA;
-//     });
-
-//     // console.log("filepath:", filePaths);
-
-//     // Save the sorted file paths to localStorage
-//     localStorage.setItem("filePaths", JSON.stringify(sortedFiles));
-//     setSelectedFile(sortedFiles[0]);
-//   }
-// }, [filePaths]);

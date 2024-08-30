@@ -37,9 +37,6 @@ body::-webkit-scrollbar-thumb:hover {
   background-color: #91919173;
 }
 
-.tabActive .hoverMode:hover{
-  background-color: #ff6060b9;
-}
 
 .as{
   color: #444444;

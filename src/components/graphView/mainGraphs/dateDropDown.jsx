@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useTheme } from "../../../lib/themeContext";
 
 export const DateDropDown = ({
@@ -6,26 +6,55 @@ export const DateDropDown = ({
   availableFilePaths,
   handleDateSelection,
   setSelectedDate,
+  initialSelectedDate,
 }) => {
   const { themeOptions } = useTheme();
-  const [activeDate, setActiveDate] = useState(null);
+  const [activeDate, setActiveDate] = useState("");
 
   // Utility function to format date as dd-mm-yy@hh:mm:ss
-  const formatDate = (dateString) => {
-    // Manually parse the date string
+  const formatDate = useCallback((dateString) => {
     const [datePart, timePart] = dateString.split("T");
     const [year, month, day] = datePart.split("-");
     const hours = timePart.slice(0, 2);
     const minutes = timePart.slice(2, 4);
-    const seconds = timePart.slice(4);
+    const seconds = timePart.slice(4, 6);
 
     return `${day}-${month}-${year.slice(-2)} @ ${hours}:${minutes}:${seconds}`;
-  };
+  }, []);
 
   // Extract unique dates from file paths
-  const dates = availableFilePaths.map((file) => {
-    return file.match(/(\d{4}-\d{2}-\d{2}T\d+)/)[0];
-  });
+  const dates = availableFilePaths
+    .map((file) => {
+      const match = file.match(/(\d{4}-\d{2}-\d{2}T\d+)/);
+      return match ? match[0] : null;
+    })
+    .filter(Boolean);
+
+  const handleActiveDate = useCallback(
+    (date) => {
+      setActiveDate(date);
+      handleDateSelection(date);
+      setSelectedDate(formatDate(date));
+    },
+    [handleDateSelection, setSelectedDate, formatDate]
+  );
+
+  useEffect(() => {
+    if (dates.length > 0) {
+      if (initialSelectedDate) {
+        // If there's an initial selected date, use it
+        const matchingDate = dates.find(date => formatDate(date) === initialSelectedDate);
+        if (matchingDate) {
+          handleActiveDate(matchingDate);
+        } else {
+          handleActiveDate(dates[0]);
+        }
+      } else if (!activeDate) {
+        // If no date is active, set the most recent date
+        handleActiveDate(dates[0]);
+      }
+    }
+  }, [dates, activeDate, handleActiveDate, initialSelectedDate, formatDate]);
 
   return (
     <div
@@ -36,21 +65,20 @@ export const DateDropDown = ({
       }}
     >
       {dates.map((date, index) => (
-        <span
+        <div
           key={index}
           className={`hoverMode rounded-sm w-full cursor-pointer ${
             activeDate === date ? "tabActive" : ""
           }`}
           onClick={() => {
-            handleDateSelection(date);
+            handleActiveDate(date);
             setIsDateTabCollapsed(false);
-            setSelectedDate(formatDate(date));
-            setActiveDate(date);
           }}
         >
           {formatDate(date)}
-        </span>
+        </div>
       ))}
     </div>
   );
 };
+
